@@ -15,7 +15,7 @@ jobs:
           python-version: '3.11'
       - run: pip install requests
       - run: python project-3.py
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: rpa-jobs
           path: "*.csv"  # 自動保存爬取結果
