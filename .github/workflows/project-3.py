@@ -166,11 +166,12 @@ def main():
     print_summary(jobs)
 
     if jobs:
-        save_to_csv(jobs)
+        save_to_csv(jobs, filename="rpa_jobs_latest.csv")
         save_to_json(jobs)
 
     print(f"\n完成時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 
 if __name__ == "__main__":
+
     main()
