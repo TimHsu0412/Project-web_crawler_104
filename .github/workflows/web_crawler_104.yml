@@ -2,20 +2,39 @@ name: 104 RPA 爬蟲
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 每天台灣時間 10:00（UTC+8 → UTC 02:00）
-  workflow_dispatch: 
+    - cron: '0 4 * * *'  # 台灣時間每天中午 12:00
+  workflow_dispatch:
+
+permissions:              # ← 新增，允許寫入 repo
+  contents: write
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4       # ← v3 改 v4
+
+      - uses: actions/setup-python@v5   # ← v4 改 v5
         with:
           python-version: '3.11'
-      - run: pip install requests
-      - run: python .github/workflows/project-3.py
-      - uses: actions/upload-artifact@v4
+
+      - name: 安裝套件
+        run: pip install requests
+
+      - name: 執行爬蟲
+        run: python .github/workflows/project-3.py
+
+      - name: Commit CSV 到 repo        # ← 新增這段
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add rpa_jobs_latest.csv
+          git commit -m "更新職缺資料 $(date +'%Y-%m-%d %H:%M')" || echo "沒有新資料"
+          git push
+
+      - name: 上傳 Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: rpa-jobs
-          path: "*.csv"  # 自動保存爬取結果
+          name: rpa-jobs-${{ github.run_id }}
+          path: "*.csv"
+          retention-days: 30
