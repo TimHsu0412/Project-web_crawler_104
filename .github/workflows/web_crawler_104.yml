@@ -2,7 +2,7 @@ name: 104 RPA 爬蟲
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # 每天台灣時間 10:00（UTC+8 → UTC 02:00）
+    - cron: '0 4 * * *'  # 每天台灣時間 10:00（UTC+8 → UTC 02:00）
   workflow_dispatch: 
 
 jobs:
